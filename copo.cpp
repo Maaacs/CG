@@ -6,6 +6,7 @@ const double PI = 3.14159;
 const int p = 50;
 const int q = 50;
 
+// Funções f, g e h para cálculo das coordenadas dos pontos no cilindro
 float f(int i, int j)
 {
     return (cos((-1 + 2 * (float)i / p) * PI));
@@ -21,7 +22,8 @@ float h(int i, int j)
     return (-1 + 2 * (float)j / q);
 }
 
-void drawCup(double raioBase, double raioTopo, double altura)
+// Funções para desenhar o cilindro e a base da xícara
+void drawCylinder(double raio, double altura)
 {
     double deltaTheta = 2 * PI / p;
     double deltaZ = altura / (q - 1);
@@ -33,29 +35,43 @@ void drawCup(double raioBase, double raioTopo, double altura)
         {
             double theta = i * deltaTheta;
             double z = j * deltaZ;
-
-            double xBase = raioBase * f(i, j);
-            double yBase = raioBase * g(i, j);
-
-            double xTopo = raioTopo * f(i, j);
-            double yTopo = raioTopo * g(i, j);
+            double x = raio * f(i, j);
+            double y = raio * g(i, j);
 
             double nx = f(i, j);
             double ny = g(i, j);
             double nz = h(i, j);
 
-            // Desenha a base do copo
-            glNormal3d(0, 0, -1);
-            glVertex3d(xBase, yBase, 0);
-
-            // Desenha a superfície lateral do copo
             glNormal3d(nx, ny, nz);
-            glVertex3d(xTopo, yTopo, z);
+            glVertex3d(x, y, z);
+
+            x = raio * f(i + 1, j);
+            y = raio * g(i + 1, j);
+
+            nx = f(i + 1, j);
+            ny = g(i + 1, j);
+            nz = h(i + 1, j);
+
+            glNormal3d(nx, ny, nz);
+            glVertex3d(x, y, z);
         }
         glEnd();
     }
+
+    // Desenha a base da xícara
+    glBegin(GL_TRIANGLE_FAN);
+    glVertex3d(0, 0, 0);
+    for (int i = 0; i <= p; i++)
+    {
+        double theta = i * deltaTheta;
+        double x = raio * cos(theta);
+        double y = raio * sin(theta);
+        glVertex3d(x, y, 0);
+    }
+    glEnd();
 }
 
+// Função para exibição OpenGL
 void display()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -74,12 +90,13 @@ void display()
     glRotatef(30, 1, 0, 0);
     glRotatef(30, 0, 1, 0);
 
-    drawCup(1.0, 0.5, 2.0); // Raio da base, raio do topo e altura do copo
+    drawCylinder(1.0, 2.0);
 
     glFlush();
     glutSwapBuffers();
 }
 
+// Função para redimensionamento da janela
 void reshape(int width, int height)
 {
     glViewport(0, 0, width, height);
@@ -97,10 +114,10 @@ int main(int argc, char **argv)
 
     glutDisplayFunc(display);
     glutReshapeFunc(reshape);
-    glEnable(GL_DEPTH_TEST);
-    glutMainLoop();
 
+    glEnable(GL_DEPTH_TEST);
+
+    glutMainLoop();
 
     return 0;
 }
-
