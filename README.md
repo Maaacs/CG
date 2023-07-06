@@ -1,7 +1,10 @@
 # CG
 
-Instale a biblioteca OpenGL: sudo apt-get install freeglut3-dev
+Instale a biblioteca OpenGL: 
 
+```bash
+sudo apt-get install freeglut3-dev
+```
 
 Para compilar use:
 
