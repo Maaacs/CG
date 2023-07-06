@@ -9,5 +9,5 @@ sudo apt-get install freeglut3-dev
 Para compilar use:
 
 ```bash
-g++ cilindro_opengl.cpp -o cilindro_opengl -lglut -lGL -lGLU
+g++ arquivo.cpp -o arquivo_opengl -lglut -lGL -lGLU
 ```
