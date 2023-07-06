@@ -6,7 +6,7 @@ const double PI = 3.14159;
 const int p = 50;
 const int q = 50;
 
-// Funções f, g e h para cálculo das coordenadas dos pontos no cilindro
+// Funções f, g e h para cálculo das coordenadas dos pontos no hiperboloide
 float f(int i, int j)
 {
     return (cos((-1 + 2 * (float)i / p) * PI));
@@ -19,14 +19,14 @@ float g(int i, int j)
 
 float h(int i, int j)
 {
-    return (-1 + 2 * (float)j / q);
+    return (1 + 2 * (float)j / q);
 }
 
-// Função para desenhar o cilindro
-void drawCylinder(double raio, double altura)
+// Função para desenhar o hiperboloide
+void drawHyperboloid(double a, double b, double c)
 {
     double deltaTheta = 2 * PI / p;
-    double deltaZ = altura / (q - 1);
+    double deltaZ = c / (q - 1);
 
     for (int i = 0; i < p; i++)
     {
@@ -35,22 +35,22 @@ void drawCylinder(double raio, double altura)
         {
             double theta = i * deltaTheta;
             double z = j * deltaZ;
-            double x = raio * f(i, j);
-            double y = raio * g(i, j);
+            double x = a * f(i, j);
+            double y = b * g(i, j);
 
             double nx = f(i, j);
             double ny = g(i, j);
-            double nz = 0.0;
+            double nz = h(i, j);
 
             glNormal3d(nx, ny, nz);
             glVertex3d(x, y, z);
 
-            x = raio * f(i + 1, j);
-            y = raio * g(i + 1, j);
+            x = a * f(i + 1, j);
+            y = b * g(i + 1, j);
 
             nx = f(i + 1, j);
             ny = g(i + 1, j);
-            nz = 0.0;
+            nz = h(i + 1, j);
 
             glNormal3d(nx, ny, nz);
             glVertex3d(x, y, z);
@@ -78,7 +78,7 @@ void display()
     glRotatef(30, 1, 0, 0);
     glRotatef(30, 0, 1, 0);
 
-    drawCylinder(0.5, 3.0); // Reduza o raio para 0.5 e a altura para 3.0
+    drawHyperboloid(1.0, 2.0, 3.0);
 
     glFlush();
     glutSwapBuffers();
@@ -97,8 +97,8 @@ int main(int argc, char **argv)
 {
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
-    glutInitWindowSize(1900, 1000);
-    glutCreateWindow("Cylinder");
+    glutInitWindowSize(800, 600);
+    glutCreateWindow("Hyperboloid");
 
     glutDisplayFunc(display);
     glutReshapeFunc(reshape);

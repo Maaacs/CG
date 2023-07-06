@@ -40,7 +40,7 @@ void drawCylinder(double raio, double altura)
 
             double nx = f(i, j);
             double ny = g(i, j);
-            double nz = 0.0;
+            double nz = h(i, j);
 
             glNormal3d(nx, ny, nz);
             glVertex3d(x, y, z);
@@ -50,7 +50,38 @@ void drawCylinder(double raio, double altura)
 
             nx = f(i + 1, j);
             ny = g(i + 1, j);
-            nz = 0.0;
+            nz = h(i + 1, j);
+
+            glNormal3d(nx, ny, nz);
+            glVertex3d(x, y, z);
+        }
+        glEnd();
+    }
+
+    // Draw the second cylinder
+    for (int i = 0; i < p; i++)
+    {
+        glBegin(GL_QUAD_STRIP);
+        for (int j = 0; j <= q; j++)
+        {
+            double theta = i * deltaTheta;
+            double z = -j * deltaZ + altura;
+            double x = raio * f(i, j);
+            double y = raio * g(i, j);
+
+            double nx = f(i, j);
+            double ny = g(i, j);
+            double nz = h(i, j);
+
+            glNormal3d(nx, ny, nz);
+            glVertex3d(x, y, z);
+
+            x = raio * f(i + 1, j);
+            y = raio * g(i + 1, j);
+
+            nx = f(i + 1, j);
+            ny = g(i + 1, j);
+            nz = h(i + 1, j);
 
             glNormal3d(nx, ny, nz);
             glVertex3d(x, y, z);
@@ -76,9 +107,9 @@ void display()
     glLightfv(GL_LIGHT0, GL_POSITION, lightPos);
 
     glRotatef(30, 1, 0, 0);
-    glRotatef(30, 0, 1, 0);
-
-    drawCylinder(0.5, 3.0); // Reduza o raio para 0.5 e a altura para 3.0
+    glRotatef(30, 0, 1, 0);   
+    drawCylinder(1.0, 2.0);
+    drawCylinder(1.0, 0.5);
 
     glFlush();
     glutSwapBuffers();
@@ -97,8 +128,8 @@ int main(int argc, char **argv)
 {
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
-    glutInitWindowSize(1900, 1000);
-    glutCreateWindow("Cylinder");
+    glutInitWindowSize(800, 600);
+    glutCreateWindow("Hourglass");
 
     glutDisplayFunc(display);
     glutReshapeFunc(reshape);
@@ -109,3 +140,4 @@ int main(int argc, char **argv)
 
     return 0;
 }
+
